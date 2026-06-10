@@ -14,8 +14,8 @@ interface TimeLeft {
 /* ─── Config ──────────────────────────────────────────────────────────── */
 const DEADLINE = new Date("2026-12-05T09:00:00");
 
-function getTimeLeft(): TimeLeft {
-  const diff = DEADLINE.getTime() - Date.now();
+function getTimeLeft(deadline: Date): TimeLeft {
+  const diff = deadline.getTime() - Date.now();
   if (diff <= 0) return { months: 0, days: 0, hours: 0, minutes: 0, seconds: 0 };
   return {
     months: Math.floor(diff / (1000 * 60 * 60 * 24 * 30)),
@@ -281,14 +281,15 @@ function BlinkingSeparator() {
 
 
 /* ─── Main Timer ─────────────────────────────────────────────────────── */
-export default function CountdownTimer() {
+export default function CountdownTimer({ targetDate }: { targetDate?: Date }) {
+  const deadline = targetDate || DEADLINE;
   const [time, setTime] = useState<TimeLeft | null>(null);
 
   useEffect(() => {
-    setTime(getTimeLeft());
-    const id = setInterval(() => setTime(getTimeLeft()), 1000);
+    setTime(getTimeLeft(deadline));
+    const id = setInterval(() => setTime(getTimeLeft(deadline)), 1000);
     return () => clearInterval(id);
-  }, []);
+  }, [deadline]);
 
   if (!time) return null;
 
