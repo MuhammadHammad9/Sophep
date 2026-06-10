@@ -57,7 +57,7 @@ export default function FeeSummaryPanel() {
 
   return (
     <div className="w-full h-full flex flex-col relative overflow-hidden border-l border-[var(--color-border)]"
-         style={{ background: "rgba(10,4,21,0.92)", backdropFilter: "blur(32px)" }}>
+         style={{ background: "var(--surface-hover)", backdropFilter: "blur(32px)" }}>
 
       {/* Top glow accent */}
       <div

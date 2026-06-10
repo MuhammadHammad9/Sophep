@@ -20,9 +20,9 @@ export default function StepProgress() {
   );
 
   return (
-    <div className="w-full mb-14">
+    <div className="w-full mb-10 sm:mb-14">
       {/* ---- Progress Track ---- */}
-      <div className="flex items-start w-full">
+      <div className="flex items-start w-full overflow-x-auto pb-2 -mx-1 px-1 sm:mx-0 sm:px-0 snap-x snap-mandatory">
         {steps.map((step, index) => {
           const stepNum  = index + 1;
           const isActive = stepNum === currentStep;
@@ -30,7 +30,7 @@ export default function StepProgress() {
           const isLast   = index === steps.length - 1;
 
           return (
-            <div key={step.label} className={`step ${isActive ? "active" : ""} ${isDone ? "done" : ""}`}>
+            <div key={step.label} className={`step min-w-[72px] sm:min-w-0 snap-start ${isActive ? "active" : ""} ${isDone ? "done" : ""}`}>
               {/* Circle + Label column */}
               <div className="step-inner">
                 {/* Circle */}
@@ -83,7 +83,7 @@ export default function StepProgress() {
 
               {/* Connector line */}
               {!isLast && (
-                <div className="step-line">
+                <div className="step-line max-sm:min-w-[88px]">
                   <motion.div
                     style={{
                       position: "absolute",
@@ -104,7 +104,7 @@ export default function StepProgress() {
       </div>
 
       {/* ---- Overall Progress Bar ---- */}
-      <div className="mt-6 w-full h-px bg-[var(--color-border)] relative overflow-hidden rounded-full">
+      <div className="mt-5 sm:mt-6 w-full h-px bg-[var(--color-border)] relative overflow-hidden rounded-full">
         <motion.div
           className="absolute inset-y-0 left-0 rounded-full"
           style={{
@@ -119,11 +119,11 @@ export default function StepProgress() {
       </div>
 
       {/* ---- Step counter chip ---- */}
-      <div className="flex justify-between items-center mt-3">
-        <span className="font-sans text-[10px] uppercase tracking-[0.2em] text-[var(--color-fg-subtle)]">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 mt-3">
+        <span className="font-sans text-[9px] sm:text-[10px] uppercase tracking-[0.16em] sm:tracking-[0.2em] text-[var(--color-fg-subtle)]">
           Step {currentStep} of {steps.length}
         </span>
-        <span className="font-sans text-[10px] uppercase tracking-[0.2em] text-[var(--color-primary)]">
+        <span className="font-sans text-[9px] sm:text-[10px] uppercase tracking-[0.16em] sm:tracking-[0.2em] text-[var(--color-primary)]">
           {Math.round(((currentStep - 1) / (steps.length - 1)) * 100)}% Complete
         </span>
       </div>

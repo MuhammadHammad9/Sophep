@@ -57,7 +57,7 @@ export default function Step3Logistics() {
 
       <div className="space-y-8">
         {/* Accommodation Toggle */}
-        <div className={`flex flex-col sm:flex-row sm:items-center justify-between p-6 md:p-8 rounded-xl border transition-all duration-500 ${needsAcc ? "border-[var(--color-primary)]/50 bg-[var(--color-primary)]/5" : "border-[var(--color-border)] bg-black/20 hover:border-[var(--color-border-hover)]"}`}>
+        <div className={`flex flex-col sm:flex-row sm:items-center justify-between p-6 md:p-8 rounded-xl border transition-all duration-500 ${needsAcc ? "border-[var(--color-primary)]/50 bg-[var(--color-primary)]/5" : "border-[var(--color-border)] bg-[var(--surface)] hover:border-[var(--color-border-hover)]"}`}>
           <div className="mb-4 sm:mb-0 pr-4">
             <div className="font-sans text-base font-medium" style={{ color: "var(--color-fg)" }}>On-Campus Accommodation</div>
             <p className="font-sans text-sm text-[var(--color-fg-muted)] mt-1">Do you require a hostel room during the event?</p>
@@ -78,7 +78,7 @@ export default function Step3Logistics() {
         )}
 
         {/* Transportation Toggle */}
-        <div className={`flex flex-col sm:flex-row sm:items-center justify-between p-6 md:p-8 rounded-xl border transition-all duration-500 ${needsTrans ? "border-[var(--color-primary)]/50 bg-[var(--color-primary)]/5" : "border-[var(--color-border)] bg-black/20 hover:border-[var(--color-border-hover)]"}`}>
+        <div className={`flex flex-col sm:flex-row sm:items-center justify-between p-6 md:p-8 rounded-xl border transition-all duration-500 ${needsTrans ? "border-[var(--color-primary)]/50 bg-[var(--color-primary)]/5" : "border-[var(--color-border)] bg-[var(--surface)] hover:border-[var(--color-border-hover)]"}`}>
           <div className="mb-4 sm:mb-0 pr-4">
             <div className="font-sans text-base font-medium" style={{ color: "var(--color-fg)" }}>University Transportation</div>
             <p className="font-sans text-sm text-[var(--color-fg-muted)] mt-1">Do you need shuttle service from your city?</p>

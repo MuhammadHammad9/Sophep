@@ -31,7 +31,14 @@ export default function Loading() {
 
           <div className="relative flex-1 mt-8">
             <div className="w-full rounded-2xl border border-[var(--color-border)] overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-[rgba(20,11,42,0.7)] via-[rgba(15,8,32,0.5)] to-transparent backdrop-blur-xl pointer-events-none" />
+              <div
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  background:
+                    "linear-gradient(135deg, color-mix(in srgb, var(--surface-hover) 90%, transparent) 0%, color-mix(in srgb, var(--surface) 70%, transparent) 55%, transparent 100%)",
+                  backdropFilter: "blur(24px)",
+                }}
+              />
               <div className="relative z-10 p-6 sm:p-8 md:p-10 space-y-6">
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div className="h-16 rounded-2xl bg-white/8 border border-white/10" />

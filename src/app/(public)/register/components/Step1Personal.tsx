@@ -78,7 +78,7 @@ export default function Step1Personal() {
               className={`flex items-center gap-3 cursor-pointer rounded-xl p-5 transition-all duration-300 border ${
                 currentEvent === ev
                   ? "border-[var(--color-primary)] bg-[var(--color-primary)]/8 shadow-[0_0_20px_var(--color-primary-glow)]"
-                  : "border-[var(--color-border-hover)] bg-[rgba(20,11,42,0.4)] hover:border-[var(--color-border-strong)]"
+                  : "border-[var(--color-border-hover)] bg-[var(--surface)] hover:border-[var(--color-border-strong)]"
               }`}
             >
               <input

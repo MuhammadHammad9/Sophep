@@ -10,6 +10,7 @@ import { UploadCloud, CheckCircle2, FileText, X, Lock, ChevronRight, Download, C
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { submitRegistration } from "@/app/actions/registration";
+import { supabase } from "@/lib/supabase";
 
 export default function Step4Checkout() {
   const { personalInfo, step2Details, logistics, updatePayment, prevStep, resetRegistration } = useRegistrationStore();
@@ -66,26 +67,38 @@ export default function Step4Checkout() {
     try {
       let receiptUrl: string | null = null;
 
-      // --- Step 1: Upload receipt file ---
+      // --- Step 1: Upload receipt file directly to storage ---
       if (file) {
         setLoadingText("UPLOADING RECEIPT...");
-        const formData = new FormData();
-        formData.append("file", file);
-        formData.append("registrationId", new Date().getTime().toString());
-
         try {
-          const uploadRes = await fetch("/api/upload", {
+          const initRes = await fetch("/api/upload/init", {
             method: "POST",
-            body: formData,
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({
+              fileName: file.name,
+              fileType: file.type,
+              fileSize: file.size,
+            }),
           });
           
-          if (!uploadRes.ok) {
-            const errorData = await uploadRes.json().catch(() => ({}));
-            throw new Error(errorData.error || `Upload failed with status ${uploadRes.status}`);
+          if (!initRes.ok) {
+            const errorData = await initRes.json().catch(() => ({}));
+            throw new Error(errorData.error || `Upload init failed with status ${initRes.status}`);
           }
           
-          const uploadData = await uploadRes.json();
-          if (uploadData.url) receiptUrl = uploadData.url;
+          const uploadData = await initRes.json();
+          const { error: uploadError } = await supabase.storage
+            .from("receipts")
+            .uploadToSignedUrl(uploadData.path, uploadData.token, file, {
+              contentType: file.type,
+              upsert: false,
+            });
+
+          if (uploadError) {
+            throw new Error(uploadError.message);
+          }
+
+          receiptUrl = uploadData.path;
         } catch (err) {
           console.error("[Checkout] Upload Fetch Error:", err);
           throw new Error("Failed to upload receipt. Please check your connection.");
@@ -151,7 +164,7 @@ export default function Step4Checkout() {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="relative w-full max-w-2xl glass-strong border border-[var(--color-border)] rounded-2xl p-8 md:p-14 text-center shadow-2xl relative overflow-hidden my-auto"
+              className="relative w-full max-w-[min(92vw,42rem)] glass-strong border border-[var(--color-border)] rounded-2xl p-5 sm:p-6 md:p-10 lg:p-14 text-center shadow-2xl relative overflow-hidden my-auto"
               role="dialog"
               aria-modal="true"
               aria-labelledby="success-modal-title"
@@ -172,14 +185,14 @@ export default function Step4Checkout() {
               <div className="absolute inset-0 bg-gradient-to-b from-[var(--color-primary)]/10 to-transparent blur-3xl -z-10 rounded-full opacity-50" />
               
               {/* Apple Pay Checkmark */}
-              <div className="mx-auto w-28 h-28 flex items-center justify-center mb-8 relative">
+              <div className="mx-auto w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 flex items-center justify-center mb-6 sm:mb-8 relative">
                 <motion.div
                   initial={{ scale: 0.8, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ delay: 0.1, type: "spring", stiffness: 200, damping: 20 }}
                   className="relative flex items-center justify-center w-full h-full"
                 >
-                  <motion.svg viewBox="0 0 50 50" className="w-24 h-24" initial="hidden" animate="visible">
+                  <motion.svg viewBox="0 0 50 50" className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24" initial="hidden" animate="visible">
                     <circle cx="25" cy="25" r="23" fill="transparent" stroke="var(--color-primary)" strokeWidth="2" strokeOpacity="0.2" />
                     <motion.circle cx="25" cy="25" r="23" fill="transparent" stroke="var(--color-primary)" strokeWidth="3" strokeLinecap="round" variants={{ hidden: { pathLength: 0, rotate: -90 }, visible: { pathLength: 1, rotate: -90, transition: { duration: 0.6, ease: "easeInOut", delay: 0.2 } } }} style={{ originX: "50%", originY: "50%" }} />
                     <motion.path d="M15 25.5 L21.5 32 L36 17" fill="transparent" stroke="var(--color-primary)" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" variants={{ hidden: { pathLength: 0 }, visible: { pathLength: 1, transition: { duration: 0.4, ease: "easeOut", delay: 0.6 } } }} />
@@ -193,25 +206,31 @@ export default function Step4Checkout() {
                   <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
                   <span className="font-sans text-[10px] uppercase tracking-[0.2em] text-[var(--color-primary)]">Secured & Verified</span>
                 </div>
-                <h1 id="success-modal-title" className="font-display text-4xl md:text-6xl uppercase tracking-wider mb-6 leading-tight">
-                  Application <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)]">Received</span>
+                <h1
+                  id="success-modal-title"
+                  className="font-display uppercase tracking-wider mb-5 sm:mb-6 leading-[0.92] text-[clamp(2rem,8vw,4rem)] md:text-[clamp(2.75rem,6vw,5.5rem)]"
+                >
+                  <span className="block text-[var(--color-fg)]">Application</span>
+                  <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)]">
+                    Received
+                  </span>
                 </h1>
-                <p className="font-sans text-[15px] text-[var(--color-fg-muted)] mb-10 leading-relaxed max-w-lg mx-auto">
+                <p className="font-sans text-[13px] sm:text-[14px] md:text-[15px] text-[var(--color-fg-muted)] mb-8 sm:mb-10 leading-relaxed max-w-lg mx-auto">
                   Your delegate registration has been securely encrypted and submitted to the SOPHEP council. Our administration is currently verifying your payment credentials. 
                   <br /><br />
                   An official delegate packet will be dispatched to your email within 24-48 hours.
                 </p>
               </motion.div>
               
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8, duration: 0.6 }} className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8, duration: 0.6 }} className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4">
                 <button onClick={() => { 
                   try { sessionStorage.removeItem('sophep-registration-storage'); } catch { /* ignore */ }
                   resetRegistration(); 
                   router.push("/"); 
-                }} className="btn btn-primary w-full sm:w-auto">
+                }} className="btn btn-primary w-full sm:w-auto px-5 sm:px-6 md:px-8">
                   Return to Portal <ChevronRight size={14} />
                 </button>
-                <button className="btn btn-secondary w-full sm:w-auto">
+                <button className="btn btn-secondary w-full sm:w-auto px-5 sm:px-6 md:px-8">
                   <Download size={14} /> Save Receipt
                 </button>
               </motion.div>
@@ -420,7 +439,7 @@ export default function Step4Checkout() {
           className={`relative border-2 border-dashed rounded-xl p-8 transition-all duration-300 text-center ${
             isDragging 
               ? "border-[var(--color-primary)] bg-[var(--color-primary)]/10" 
-              : "border-[var(--color-border-hover)] bg-[var(--color-nav-bg)] hover:border-[var(--color-fg-muted)]"
+              : "border-[var(--color-border-hover)] bg-[var(--surface)] hover:border-[var(--color-fg-muted)]"
           }`}
           onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
           onDragLeave={(e) => { e.preventDefault(); setIsDragging(false); }}
