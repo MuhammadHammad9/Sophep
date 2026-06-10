@@ -19,9 +19,12 @@ export default function Magnetic({ children, strength = 0.5, className = "" }: M
   const springY = useSpring(y, { stiffness: 150, damping: 15, mass: 0.1 });
 
   useEffect(() => {
-    if (window.matchMedia("(pointer: coarse)").matches || window.innerWidth < 768) {
-      setIsMobile(true);
-    }
+    const t = setTimeout(() => {
+      if (window.matchMedia("(pointer: coarse)").matches || window.innerWidth < 768) {
+        setIsMobile(true);
+      }
+    }, 0);
+    return () => clearTimeout(t);
   }, []);
 
   const handleMouseMove = (e: React.MouseEvent) => {

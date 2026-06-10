@@ -44,7 +44,7 @@ export default function InfiniteMarquee({
     >
       <div
         className={cn(
-          "flex whitespace-nowrap",
+          "flex whitespace-nowrap will-change-transform translate-z-0",
           prefersReducedMotion ? "" : "marquee-track"
         )}
         style={{

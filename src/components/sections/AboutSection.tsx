@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useScroll, useTransform, motion, useMotionValue, useSpring } from "framer-motion";
+import { useScroll, useTransform, motion } from "framer-motion";
 import AnimateReveal from "@/components/ui/AnimateReveal";
 import Magnetic from "@/components/ui/Magnetic";
 
@@ -103,12 +103,8 @@ export default function AboutSection() {
     <section
       id="about"
       ref={containerRef}
-      className="overflow-hidden relative scroll-mt-24"
-      style={{
-        paddingTop: "var(--section-py-lg)",
-        paddingBottom: "var(--section-py-lg)",
-        backgroundColor: "var(--color-bg)",
-      }}
+      className="overflow-hidden relative scroll-mt-24 section-stack-lg"
+      style={{ backgroundColor: "var(--color-bg)" }}
     >
       {/* Background glow */}
       <div
@@ -122,7 +118,7 @@ export default function AboutSection() {
       />
 
       <div className="container-sophep relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
           {/* Left — Content */}
           <div>
             <AnimateReveal className="mb-10">
@@ -193,13 +189,16 @@ export default function AboutSection() {
               className="absolute top-0 right-0 w-[85%] h-[65%] rounded-2xl overflow-hidden border border-[var(--color-border)] shadow-[0_24px_60px_rgba(0,0,0,0.4)]"
             >
               <AnimateReveal variant="scaleUp" className="w-full h-full">
-                <Image
-                  src="/media-3.png"
-                  alt="SOPHEP Conference — delegates in session"
-                  fill
-                  className="object-cover transition-transform duration-1000 hover:scale-105"
-                  style={{ filter: "grayscale(20%)" }}
-                />
+                <div className="relative w-full h-full">
+                  <Image
+                    src="/media-3.png"
+                    alt="SOPHEP Conference — delegates in session"
+                    fill
+                    className="object-cover transition-transform duration-1000 hover:scale-105"
+                    style={{ filter: "grayscale(20%)" }}
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                  />
+                </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
               </AnimateReveal>
             </motion.div>
@@ -210,13 +209,16 @@ export default function AboutSection() {
               className="absolute bottom-0 left-0 w-[60%] h-[50%] rounded-2xl overflow-hidden border border-[var(--color-border-hover)] shadow-[0_16px_40px_rgba(0,0,0,0.3)] z-10"
             >
               <AnimateReveal variant="scaleUp" delay={0.2} className="w-full h-full">
-                <Image
-                  src="/academic-prestige.png"
-                  alt="SOPHEP — academic excellence"
-                  fill
-                  className="object-cover transition-transform duration-1000 hover:scale-105"
-                  style={{ filter: "grayscale(15%)" }}
-                />
+                <div className="relative w-full h-full">
+                  <Image
+                    src="/academic-prestige.png"
+                    alt="SOPHEP — academic excellence"
+                    fill
+                    className="object-cover transition-transform duration-1000 hover:scale-105"
+                    style={{ filter: "grayscale(15%)" }}
+                    sizes="(max-width: 1024px) 100vw, 40vw"
+                  />
+                </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
                 <div className="absolute bottom-4 left-4">
                   <span className="font-sans text-[9px] uppercase tracking-[0.3em] text-white/80 bg-black/50 px-3 py-1.5 rounded-full backdrop-blur-sm border border-white/10">

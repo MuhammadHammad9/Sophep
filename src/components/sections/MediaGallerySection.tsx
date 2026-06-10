@@ -35,10 +35,10 @@ const mediaItems = [
 
 export default function MediaGallerySection() {
   return (
-    <section className="py-32 lg:py-48" style={{ backgroundColor: "var(--color-bg)" }}>
+    <section className="section-stack-lg" style={{ backgroundColor: "var(--color-bg)" }}>
       <div className="container-sophep">
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row justify-between items-end gap-10 mb-20">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-10 mb-16 md:mb-20">
           <AnimateReveal staggerChildren={0.1}>
             <span
               className="font-sans text-[10px] uppercase tracking-[0.4em] font-light block mb-6 opacity-60"
@@ -74,7 +74,7 @@ export default function MediaGallerySection() {
         </div>
 
         {/* Masonry/Grid Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-6 h-auto md:h-[650px]">
+        <div className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-4 md:gap-6 h-auto md:h-[650px]">
           {mediaItems.map((item, index) => (
             <div
               key={item.id}
@@ -91,6 +91,7 @@ export default function MediaGallerySection() {
                     alt={item.alt}
                     fill
                     className="object-cover filter grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-1000 ease-in-out"
+                    sizes="(max-width: 768px) 100vw, 33vw"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
                   <div className="absolute bottom-6 left-6 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 delay-100">

@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
-import { motion, useAnimation } from "framer-motion";
+import { motion } from "framer-motion";
 import { Mail, Handshake, Users, Megaphone } from "lucide-react";
 import AnimateReveal from "@/components/ui/AnimateReveal";
 import Magnetic from "@/components/ui/Magnetic";

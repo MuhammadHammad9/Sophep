@@ -58,6 +58,7 @@ const AnimateReveal = ({
   once = true,
   as: Component = "div",
 }: AnimateRevealProps) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const MotionComponent = (typeof Component === "string" ? motion[Component as keyof typeof motion] : motion(Component as any)) as any;
 
   return (

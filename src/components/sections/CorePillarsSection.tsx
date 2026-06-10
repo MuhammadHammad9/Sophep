@@ -141,7 +141,7 @@ export default function CorePillarsSection() {
         >
           <div ref={inner} className="flex gap-6 w-max px-4">
             {committees.map((committee) => {
-              const Icon = committee.icon;
+
               return (
                 <div key={committee.title} className="w-[85vw] max-w-[340px] md:w-[380px] flex-shrink-0">
                   <LuxuryCard className="h-full glass-overlay">

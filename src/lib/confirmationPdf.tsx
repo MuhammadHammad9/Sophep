@@ -10,7 +10,6 @@ import {
   Image,
   StyleSheet,
   renderToBuffer,
-  Font,
 } from '@react-pdf/renderer';
 import type { Registration } from '@/app/actions/admin';
 

@@ -13,7 +13,7 @@ const highlights = [
   { value: 12, label: "Past Editions", suffix: "", icon: Award, color: "var(--color-neo-pink)" },
 ];
 
-function StatCard({ item, index }: { item: typeof highlights[0]; index: number }) {
+function StatCard({ item }: { item: typeof highlights[0] }) {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
   
@@ -120,12 +120,8 @@ export default function ConferenceHighlights() {
   return (
     <section
       id="highlights"
-      className="relative overflow-hidden scroll-mt-24"
-      style={{
-        paddingTop: "var(--section-py)",
-        paddingBottom: "var(--section-py)",
-        backgroundColor: "var(--color-bg)",
-      }}
+      className="relative overflow-hidden scroll-mt-24 section-stack"
+      style={{ backgroundColor: "var(--color-bg)" }}
     >
       {/* Background glow */}
       <div className="absolute inset-0 pointer-events-none">
@@ -153,10 +149,10 @@ export default function ConferenceHighlights() {
         {/* Stat Cards */}
         <AnimateReveal
           staggerChildren={0.12}
-          className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6"
+          className="responsive-grid-tight"
         >
-          {highlights.map((item, index) => (
-            <StatCard key={item.label} item={item} index={index} />
+          {highlights.map((item) => (
+            <StatCard key={item.label} item={item} />
           ))}
         </AnimateReveal>
       </div>

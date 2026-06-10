@@ -5,7 +5,6 @@ import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import AnimateReveal from "@/components/ui/AnimateReveal";
 import ImageReveal from "@/components/ui/ImageReveal";
-import Magnetic from "@/components/ui/Magnetic";
 
 const mediaItems = [
   { id: 1, src: "/media-1.png", alt: "Award Ceremonies & Highlights", label: "Award Moments" },
@@ -24,14 +23,12 @@ const TIMELINE = [
 function TimelineDot({
   item,
   index,
-  total,
   isActive,
   onHover,
   onLeave,
 }: {
   item: (typeof TIMELINE)[number];
   index: number;
-  total: number;
   isActive: boolean;
   onHover: () => void;
   onLeave: () => void;
@@ -137,6 +134,7 @@ export default function LegacyPreview() {
                   fill
                   className="object-cover transition-all duration-1000 group-hover:scale-105"
                   style={{ filter: "grayscale(25%)" }}
+                  sizes="(max-width: 768px) 100vw, 58vw"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
@@ -165,13 +163,14 @@ export default function LegacyPreview() {
             <div className="flex-1 rounded-2xl overflow-hidden relative group min-h-[200px] cursor-pointer">
               <ImageReveal direction="up" delay={0.2} className="w-full h-full">
                 <div className="relative w-full h-full min-h-[200px]">
-                  <Image
-                    src={mediaItems[1].src}
-                    alt={mediaItems[1].alt}
-                    fill
-                    className="object-cover transition-transform duration-1000 group-hover:scale-110"
-                    style={{ filter: "grayscale(15%)" }}
-                  />
+                <Image
+                  src={mediaItems[1].src}
+                  alt={mediaItems[1].alt}
+                  fill
+                  className="object-cover transition-transform duration-1000 group-hover:scale-110"
+                  style={{ filter: "grayscale(15%)" }}
+                  sizes="(max-width: 768px) 100vw, 42vw"
+                />
                   <div className="absolute inset-0 bg-black/35 group-hover:bg-black/10 transition-colors duration-500" />
                   <div className="absolute bottom-4 left-4">
                     <span className="font-sans text-[9px] uppercase tracking-[0.3em] text-white/80 bg-black/50 px-3 py-1.5 rounded-full backdrop-blur-sm border border-white/20 transition-all duration-300 group-hover:border-[var(--color-primary)]">
@@ -186,13 +185,14 @@ export default function LegacyPreview() {
             <div className="flex-1 rounded-2xl overflow-hidden relative group min-h-[200px] cursor-pointer">
               <ImageReveal direction="up" delay={0.35} className="w-full h-full">
                 <div className="relative w-full h-full min-h-[200px]">
-                  <Image
-                    src={mediaItems[2].src}
-                    alt={mediaItems[2].alt}
-                    fill
-                    className="object-cover transition-transform duration-1000 group-hover:scale-110"
-                    style={{ filter: "grayscale(15%)" }}
-                  />
+                <Image
+                  src={mediaItems[2].src}
+                  alt={mediaItems[2].alt}
+                  fill
+                  className="object-cover transition-transform duration-1000 group-hover:scale-110"
+                  style={{ filter: "grayscale(15%)" }}
+                  sizes="(max-width: 768px) 100vw, 42vw"
+                />
                   <div className="absolute inset-0 bg-black/35 group-hover:bg-black/10 transition-colors duration-500" />
                   <div className="absolute bottom-4 left-4">
                     <span className="font-sans text-[9px] uppercase tracking-[0.3em] text-white/80 bg-black/50 px-3 py-1.5 rounded-full backdrop-blur-sm border border-white/20 transition-all duration-300 group-hover:border-[var(--color-primary)]">
@@ -227,7 +227,6 @@ export default function LegacyPreview() {
                     key={t.year}
                     item={t}
                     index={i}
-                    total={TIMELINE.length}
                     isActive={isActive}
                     onHover={() => setHoveredIndex(i)}
                     onLeave={() => setHoveredIndex(null)}

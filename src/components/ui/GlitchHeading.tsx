@@ -58,13 +58,13 @@ export default function GlitchHeading({
   // already false), preventing the "setState in effect body" lint warning.
   useEffect(() => {
     if (!isGlitching) {
-      // Only update if necessary to avoid a redundant re-render on mount.
-      setDisplayText((prev) => (prev !== text ? text : prev));
-      setGlitchStyle((prev) =>
-        Object.keys(prev).length > 0 ? {} : prev
-      );
-      setShowFlash(false);
-      return;
+      // Defer state update to avoid 'setState inside effect body' triggering a synchronous re-render
+      const t = setTimeout(() => {
+        setDisplayText((prev) => (prev !== text ? text : prev));
+        setGlitchStyle((prev) => (Object.keys(prev).length > 0 ? {} : prev));
+        setShowFlash(false);
+      }, 0);
+      return () => clearTimeout(t);
     }
 
     const scrambleInterval = setInterval(() => {
