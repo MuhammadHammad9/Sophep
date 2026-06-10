@@ -155,7 +155,7 @@ export default function CorePillarsSection() {
                         >
                           {committee.tag}
                         </span>
-                        <div className="px-3 py-1 rounded-full border border-white/10 bg-white/5 font-sans text-[10px] tracking-widest text-white/70">
+                        <div className="px-3 py-1 rounded-full border border-[var(--color-border)] bg-[var(--color-bg-overlay)] font-sans text-[10px] tracking-widest text-[var(--color-fg)] opacity-70">
                           {committee.delegates} DELEGATES
                         </div>
                       </div>
@@ -177,12 +177,12 @@ export default function CorePillarsSection() {
                         className="font-sans font-light text-[13px] leading-[1.8] mb-12 opacity-80"
                         style={{ color: "var(--color-fg-muted)" }}
                       >
-                        <span className="font-medium text-white/50 block mb-1 uppercase text-[9px] tracking-widest">Agenda</span>
+                        <span className="font-medium text-[var(--color-fg)] opacity-50 block mb-1 uppercase text-[9px] tracking-widest">Agenda</span>
                         {committee.topic}
                       </p>
 
                       {/* Bottom Row */}
-                      <div className="mt-auto pt-6 border-t border-white/10 flex justify-between items-center">
+                      <div className="mt-auto pt-6 border-t border-[var(--color-border)] flex justify-between items-center">
                         <div className="flex items-center gap-2">
                           <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
                           <span className="font-sans text-[11px] uppercase tracking-widest font-medium opacity-80">

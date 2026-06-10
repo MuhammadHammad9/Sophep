@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useTransition, useEffect } from 'react';
+import { Clipboard, Target, Search, Mail, CheckCircle2, AlertCircle, Download, X } from 'lucide-react';
 import type { Registration, AuditEntry, EventCapacity, WaitlistEntry } from '@/app/actions/admin';
 import { updatePaymentStatus, logoutAdmin, exportRegistrationsToExcel, bulkUpdatePaymentStatus, dispatchSequence } from '@/app/actions/admin';
 import AdminMetricsHUD from './AdminMetricsHUD';
@@ -95,8 +96,15 @@ export default function AdminDashboardClient({
   const handleBulkAction = async (status: 'verified' | 'rejected') => {
     if (!selectedIds.size) return;
     setBulkPending(true);
+    
+    // Get CSRF token from cookie
+    const csrfToken = document.cookie
+      .split('; ')
+      .find(row => row.startsWith('admin_csrf='))
+      ?.split('=')[1] || '';
+    
     const ids = Array.from(selectedIds);
-    const result = await bulkUpdatePaymentStatus(ids, status);
+    const result = await bulkUpdatePaymentStatus(csrfToken, ids, status);
     setBulkPending(false);
 
     if (result.success) {
@@ -125,7 +133,13 @@ export default function AdminDashboardClient({
   const handleExport = async () => {
     setIsExporting(true);
     try {
-      const result = await exportRegistrationsToExcel();
+      // Get CSRF token from cookie
+      const csrfToken = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('admin_csrf='))
+        ?.split('=')[1] || '';
+      
+      const result = await exportRegistrationsToExcel(csrfToken);
       if (result.success && result.base64 && result.filename) {
         const bytes = Uint8Array.from(atob(result.base64), (c) => c.charCodeAt(0));
         const blob = new Blob([bytes], {
@@ -145,11 +159,11 @@ export default function AdminDashboardClient({
     }
   };
 
-  const tabs: { id: ActiveTab; label: string; icon: string; badge?: number }[] = [
-    { id: 'registrations', label: 'Registrations', icon: '📋', badge: registrations.length },
-    { id: 'seats', label: 'Seat Manager', icon: '🎯', badge: initialWaitlist.length || undefined },
-    { id: 'audit', label: 'Activity Log', icon: '🔍', badge: initialAuditLog.length || undefined },
-    { id: 'emails', label: 'Emails & Settings', icon: '✉️' },
+  const tabs: { id: ActiveTab; label: string; icon: React.ReactNode; badge?: number }[] = [
+    { id: 'registrations', label: 'Registrations', icon: <Clipboard className="w-5 h-5" />, badge: registrations.length },
+    { id: 'seats', label: 'Seat Manager', icon: <Target className="w-5 h-5" />, badge: initialWaitlist.length || undefined },
+    { id: 'audit', label: 'Activity Log', icon: <Search className="w-5 h-5" />, badge: initialAuditLog.length || undefined },
+    { id: 'emails', label: 'Emails & Settings', icon: <Mail className="w-5 h-5" /> },
   ];
 
   return (
@@ -170,7 +184,12 @@ export default function AdminDashboardClient({
         <div className="adm-nav-actions">
           {actionFeedback && (
             <div className={`adm-toast adm-toast-${actionFeedback.type}`}>
-              {actionFeedback.type === 'success' ? '✓' : '⚠'} {actionFeedback.message}
+              {actionFeedback.type === 'success' ? (
+                <CheckCircle2 className="w-4 h-4" />
+              ) : (
+                <AlertCircle className="w-4 h-4" />
+              )}
+              {actionFeedback.message}
             </div>
           )}
           <form action={logoutAdmin}>
@@ -222,7 +241,10 @@ export default function AdminDashboardClient({
                   disabled={isExporting || registrations.length === 0}
                   title="Download all registrations as Excel"
                 >
-                  {isExporting ? '⏳ Exporting...' : '⬇ Export Excel'}
+                  {isExporting ? 'Processing...' : <>
+                    <Download className="inline-block w-4 h-4 mr-1" />
+                    Export Excel
+                  </>}
                 </button>
               </div>
             </div>
@@ -237,21 +259,28 @@ export default function AdminDashboardClient({
                     onClick={() => handleBulkAction('verified')}
                     disabled={isBulkPending}
                   >
-                    {isBulkPending ? '...' : `✅ Approve All (${selectedIds.size})`}
+                    {isBulkPending ? '...' : <>
+                      <CheckCircle2 className="inline-block w-4 h-4 mr-1" />
+                      Approve All ({selectedIds.size})
+                    </>}
                   </button>
                   <button
                     className="adm-bulk-btn adm-bulk-reject"
                     onClick={() => handleBulkAction('rejected')}
                     disabled={isBulkPending}
                   >
-                    {isBulkPending ? '...' : `❌ Reject All (${selectedIds.size})`}
+                    {isBulkPending ? '...' : <>
+                      <X className="inline-block w-4 h-4 mr-1" />
+                      Reject All ({selectedIds.size})
+                    </>}
                   </button>
                   <button
                     className="adm-bulk-btn adm-bulk-clear"
                     onClick={() => setSelectedIds(new Set())}
                     disabled={isBulkPending}
                   >
-                    ✕ Clear
+                    <X className="inline-block w-4 h-4 mr-1" />
+                    Clear
                   </button>
                 </div>
               </div>
@@ -408,7 +437,7 @@ export default function AdminDashboardClient({
 
       <style jsx>{`
         .adm-root {
-          min-height: 100vh;
+          min-height: 100dvh;
           background: #05010f;
           background-image:
             linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),

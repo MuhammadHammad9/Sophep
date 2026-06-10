@@ -7,7 +7,7 @@ export const metadata = {
 
 export default function RegisterPage() {
   return (
-    <main className="min-h-screen bg-[var(--color-bg)] pt-20">
+    <main className="min-h-dvh bg-[var(--color-bg)] pt-20">
       {/* We removed the .container-sophep to allow full width for the grid layout */}
       <RegistrationEngine />
     </main>

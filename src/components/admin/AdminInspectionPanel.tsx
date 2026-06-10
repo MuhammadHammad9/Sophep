@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { X, AlertTriangle, Check, Hourglass, Lock } from 'lucide-react';
 import type { Registration } from '@/app/actions/admin';
 
 // ── Inline Receipt Viewer ─────────────────────────────────────────────────────
@@ -22,7 +23,7 @@ function ReceiptViewer({ url, registrationId }: { url: string; registrationId: s
         </div>
         <div className="ip-receipt-hint">
           <a href={url} target="_blank" rel="noopener noreferrer" className="ip-link">
-            ↗ Open PDF in new tab
+            <span className="inline-block mr-1">↗</span> Open PDF in new tab
           </a>
         </div>
       </div>
@@ -50,7 +51,8 @@ function ReceiptViewer({ url, registrationId }: { url: string; registrationId: s
           className="ip-receipt-fallback"
           style={{ display: 'none' }}
         >
-          <span>⚠ Image preview unavailable.</span>
+          <AlertTriangle className="w-5 h-5 mx-auto mb-2" />
+          <span>Image preview unavailable.</span>
           <a href={url} target="_blank" rel="noopener noreferrer" className="ip-link">
             Open receipt directly
           </a>
@@ -102,7 +104,9 @@ export default function AdminInspectionPanel({ registration: r, onClose, onStatu
                 <div className="ip-ref">Ref #{r.id.slice(0, 8).toUpperCase()}</div>
                 <div className="ip-applicant-name">{r.full_name}</div>
               </div>
-              <button className="ip-close-btn" onClick={onClose} aria-label="Close panel">✕</button>
+              <button className="ip-close-btn" onClick={onClose} aria-label="Close panel">
+                <X className="w-4 h-4" />
+              </button>
             </div>
 
             <div className="ip-body">
@@ -122,8 +126,8 @@ export default function AdminInspectionPanel({ registration: r, onClose, onStatu
                 <InfoRow label="Event" value={r.event_type} />
                 <InfoRow label="Type" value={r.delegate_type} />
                 <InfoRow label="Amount" value={`PKR ${(r.total_amount ?? 0).toLocaleString()}`} />
-                <InfoRow label="Accommodation" value={r.accommodation_needed ? 'Yes ✓' : 'No'} />
-                <InfoRow label="Transportation" value={r.transportation_needed ? 'Yes ✓' : 'No'} />
+                <InfoRow label="Accommodation" value={r.accommodation_needed ? <><Check className="inline-block w-4 h-4 mr-1" />Yes</> : 'No'} />
+                <InfoRow label="Transportation" value={r.transportation_needed ? <><Check className="inline-block w-4 h-4 mr-1" />Yes</> : 'No'} />
               </section>
 
               {/* Delegation Roster */}
@@ -165,28 +169,41 @@ export default function AdminInspectionPanel({ registration: r, onClose, onStatu
                   onClick={() => onStatusUpdate(r.id, 'verified')}
                   disabled={isPending}
                 >
-                  {isPending ? '⏳ Processing...' : '✅ Verify Payment'}
+                  {isPending ? <>
+                    <Hourglass className="inline-block w-4 h-4 mr-1" />
+                    Processing...
+                  </> : <>
+                    <Check className="inline-block w-4 h-4 mr-1" />
+                    Verify Payment
+                  </>}
                 </button>
                 <button
                   className="ip-action-btn ip-action-reject"
                   onClick={() => onStatusUpdate(r.id, 'rejected')}
                   disabled={isPending}
                 >
-                  {isPending ? '⏳ Processing...' : '❌ Reject Application'}
+                  {isPending ? <>
+                    <Hourglass className="inline-block w-4 h-4 mr-1" />
+                    Processing...
+                  </> : <>
+                    <X className="inline-block w-4 h-4 mr-1" />
+                    Reject Application
+                  </>}
                 </button>
               </div>
             ) : (
               <div className="ip-locked-zone">
                 <div className={`ip-locked-banner ${r.payment_status === 'verified' ? 'ip-locked-verified' : 'ip-locked-rejected'}`}>
                   <div className="ip-locked-icon">
-                    {r.payment_status === 'verified' ? '✅' : '❌'}
+                    {r.payment_status === 'verified' ? <Check className="w-6 h-6" /> : <X className="w-6 h-6" />}
                   </div>
                   <div className="ip-locked-text">
                     <strong>{r.payment_status === 'verified' ? 'Payment Verified' : 'Application Rejected'}</strong>
                     <span>This registration has been finalized and cannot be changed.</span>
                   </div>
                   <div className="ip-locked-badge">
-                    🔒 Locked
+                    <Lock className="inline-block w-3 h-3 mr-1" />
+                    Locked
                   </div>
                 </div>
               </div>
@@ -308,7 +325,7 @@ export default function AdminInspectionPanel({ registration: r, onClose, onStatu
         .ip-locked-rejected {
           background: rgba(239,68,68,0.08); border-color: rgba(239,68,68,0.25); color: #fca5a5;
         }
-        .ip-locked-icon { font-size: 22px; flex-shrink: 0; }
+        .ip-locked-icon { font-size: 22px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
         .ip-locked-text { flex: 1; }
         .ip-locked-text strong { display: block; font-size: 14px; font-weight: 700; margin-bottom: 2px; }
         .ip-locked-text span { font-size: 12px; opacity: 0.7; }

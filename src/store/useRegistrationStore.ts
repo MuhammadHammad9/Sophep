@@ -28,6 +28,8 @@ const initialState = {
   payment: null,
 };
 
+// Security: Only persist currentStep to avoid storing PII in client-side storage.
+// Sensitive data (personalInfo, step2Details, logistics, payment) remains in memory only.
 export const useRegistrationStore = create<RegistrationState>()(
   persist(
     (set) => ({
@@ -45,8 +47,9 @@ export const useRegistrationStore = create<RegistrationState>()(
       resetRegistration: () => set(initialState),
     }),
     {
-      name: 'sophep-registration-storage', // name of the item in the storage (must be unique)
-      storage: createJSONStorage(() => sessionStorage), // Fix: use sessionStorage to avoid stale state across sessions
+      name: 'sophep-registration-storage',
+      storage: createJSONStorage(() => sessionStorage),
+      partialize: (state) => ({ currentStep: state.currentStep }), // Only persist currentStep
     }
   )
 );

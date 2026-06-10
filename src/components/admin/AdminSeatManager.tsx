@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { AlertTriangle, Ban, Check, Hourglass } from 'lucide-react';
 import type { EventCapacity, WaitlistEntry } from '@/app/actions/admin';
 import { updateEventCapacity } from '@/app/actions/admin';
 
@@ -54,7 +55,9 @@ export default function AdminSeatManager({ initialCapacities, initialWaitlist }:
       {/* Migration warning — shown when tables haven't been created yet */}
       {initialCapacities.length === 0 && (
         <div className="sm-migration-warning">
-          <div className="sm-mw-icon">⚠️</div>
+          <div className="sm-mw-icon">
+            <AlertTriangle className="w-7 h-7" />
+          </div>
           <div className="sm-mw-content">
             <strong>Database migrations required</strong>
             <p>The seat capacity tables don&apos;t exist yet. Run these two SQL files in your Supabase dashboard (SQL Editor):</p>

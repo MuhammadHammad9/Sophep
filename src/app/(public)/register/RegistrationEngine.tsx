@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRegistrationStore } from "@/store/useRegistrationStore";
 
@@ -51,24 +51,20 @@ export default function RegistrationEngine() {
   // Update synchronously BEFORE paint — this is intentional, not a setState call.
   prevStepRef.current = currentStep;
 
-  // ── Mounted guard — prevents SSR hydration mismatches ────────────────────
-  // We intentionally initialise to `true` on the client so the first paint
-  // includes the form. Using a layout-effect + state would add a render cycle.
-  const hasMounted = useRef(false);
-  if (typeof window !== "undefined") hasMounted.current = true;
-
   // ── Prevent accidental navigation mid-form ────────────────────────────────
-  if (typeof window !== "undefined" && currentStep > 1 && currentStep < 4 && personalInfo) {
-    const handler = (e: BeforeUnloadEvent) => {
-      e.preventDefault();
-      e.returnValue = "";
-    };
-    // Only add if not already added — React StrictMode double-invokes render
-    // but the listener ref guard below handles deduplication.
-    window.onbeforeunload = handler;
-  } else if (typeof window !== "undefined") {
-    window.onbeforeunload = null;
-  }
+  
+  useEffect(() => {
+    if (currentStep > 1 && currentStep < 4 && personalInfo) {
+      const handler = (e: BeforeUnloadEvent) => {
+        e.preventDefault();
+        e.returnValue = "";
+      };
+      window.addEventListener("beforeunload", handler);
+      return () => {
+        window.removeEventListener("beforeunload", handler);
+      };
+    }
+  }, [currentStep, personalInfo]);
 
   const slideVariants = {
     initial: { x: isForward ? 40 : -40, opacity: 0, filter: "blur(4px)" },
@@ -79,7 +75,7 @@ export default function RegistrationEngine() {
   const meta = STEP_META[currentStep - 1] ?? STEP_META[0];
 
   return (
-    <div className="flex flex-col lg:flex-row w-full min-h-[calc(100vh-80px)] relative">
+    <div className="flex flex-col lg:flex-row w-full min-h-[calc(100dvh-80px)] relative">
       <AutoSaveIndicator />
 
       {/* ── Atmospheric Glow Orbs ── */}
@@ -178,7 +174,7 @@ export default function RegistrationEngine() {
 
       {/* ══ LIVE FEE SUMMARY PANEL ══ */}
       <div className="lg:w-[360px] xl:w-[420px] flex-shrink-0 relative z-40 order-last">
-        <div className="sticky top-0 lg:h-[calc(100vh-80px)]">
+        <div className="sticky top-0 lg:h-[calc(100dvh-80px)]">
           <FeeSummaryPanel />
         </div>
       </div>

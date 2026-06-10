@@ -38,7 +38,7 @@ export default function EditorialHero() {
   };
 
   return (
-    <section className="relative min-h-[90vh] flex flex-col justify-center overflow-hidden noise-grain pt-32 pb-20">
+    <section className="relative min-h-[90dvh] flex flex-col justify-center overflow-hidden noise-grain pt-32 pb-20">
       {/* Background Volumetric Glows */}
       <motion.div 
         variants={glowVariants}

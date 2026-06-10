@@ -1,17 +1,18 @@
 'use client';
 
 import { useState } from 'react';
+import { LockKeyhole, DoorOpen, Check, X, BarChart3, Target, Zap, Clipboard } from 'lucide-react';
 import type { AuditEntry } from '@/app/actions/admin';
 
-const ACTION_CONFIG: Record<string, { label: string; color: string; icon: string }> = {
-  login:           { label: 'Login',           color: '#60a5fa', icon: '🔐' },
-  logout:          { label: 'Logout',          color: '#94a3b8', icon: '🚪' },
-  verify_payment:  { label: 'Verified',        color: '#22c55e', icon: '✅' },
-  reject_payment:  { label: 'Rejected',        color: '#ef4444', icon: '❌' },
-  bulk_verify:     { label: 'Bulk Verify',     color: '#4ade80', icon: '✅✅' },
-  bulk_reject:     { label: 'Bulk Reject',     color: '#fca5a5', icon: '❌❌' },
-  export:          { label: 'Export',          color: '#a78bfa', icon: '📊' },
-  update_capacity: { label: 'Capacity Update', color: '#fbbf24', icon: '🎯' },
+const ACTION_CONFIG: Record<string, { label: string; color: string; icon: React.ReactNode }> = {
+  login:           { label: 'Login',           color: '#60a5fa', icon: <LockKeyhole className="w-4 h-4" /> },
+  logout:          { label: 'Logout',          color: '#94a3b8', icon: <DoorOpen className="w-4 h-4" /> },
+  verify_payment:  { label: 'Verified',        color: '#22c55e', icon: <Check className="w-4 h-4" /> },
+  reject_payment:  { label: 'Rejected',        color: '#ef4444', icon: <X className="w-4 h-4" /> },
+  bulk_verify:     { label: 'Bulk Verify',     color: '#4ade80', icon: <Check className="w-4 h-4" /> },
+  bulk_reject:     { label: 'Bulk Reject',     color: '#fca5a5', icon: <X className="w-4 h-4" /> },
+  export:          { label: 'Export',          color: '#a78bfa', icon: <BarChart3 className="w-4 h-4" /> },
+  update_capacity: { label: 'Capacity Update', color: '#fbbf24', icon: <Target className="w-4 h-4" /> },
 };
 
 function formatRelative(iso: string) {
@@ -47,13 +48,13 @@ export default function AdminAuditFeed({ entries }: Props) {
 
       {entries.length === 0 ? (
         <div className="af-empty">
-          <span>📋</span>
+          <Clipboard className="w-7 h-7 mx-auto" />
           <p>No admin actions logged yet.</p>
         </div>
       ) : (
         <div className="af-feed">
           {visible.map((entry) => {
-            const cfg = ACTION_CONFIG[entry.action] ?? { label: entry.action, color: '#94a3b8', icon: '⚡' };
+            const cfg = ACTION_CONFIG[entry.action] ?? { label: entry.action, color: '#94a3b8', icon: <Zap className="w-4 h-4" /> };
             return (
               <div key={entry.id} className="af-entry">
                 <div className="af-entry-icon" style={{ color: cfg.color }}>{cfg.icon}</div>
@@ -123,7 +124,7 @@ export default function AdminAuditFeed({ entries }: Props) {
           color: rgba(255,255,255,0.3);
           font-size: 14px;
         }
-        .af-empty span { font-size: 28px; display: block; margin-bottom: 8px; }
+        .af-empty svg { display: block; margin: 0 auto 8px; color: rgba(255,255,255,0.3); }
 
         .af-feed { padding: 8px 0; }
         .af-entry {
@@ -136,7 +137,7 @@ export default function AdminAuditFeed({ entries }: Props) {
         }
         .af-entry:last-child { border-bottom: none; }
         .af-entry:hover { background: rgba(255,255,255,0.02); }
-        .af-entry-icon { font-size: 16px; margin-top: 1px; flex-shrink: 0; width: 22px; text-align: center; }
+        .af-entry-icon { font-size: 16px; margin-top: 1px; flex-shrink: 0; width: 22px; height: 22px; text-align: center; display: flex; align-items: center; justify-content: center; }
         .af-entry-body { flex: 1; min-width: 0; }
         .af-entry-top { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 4px; }
         .af-action-badge {

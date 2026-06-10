@@ -10,12 +10,11 @@ import { LUXURY_EASE } from "@/components/layout/AnimatePage";
 import Magnetic from "@/components/ui/Magnetic";
 
 const NAV_LINKS = [
-  { label: "About", href: "/#about" },
-  { label: "Committees", href: "/committees" },
-  { label: "Schedule", href: "/schedule" },
-  { label: "Speakers", href: "/speakers" },
-  { label: "Sponsors", href: "/sponsors" },
-  { label: "Legacy", href: "/legacy" },
+  { label: "About", href: "/about", comingSoon: true },
+  { label: "Committees", href: "/#committees", comingSoon: false },
+  { label: "Schedule", href: "/schedule", comingSoon: true },
+  { label: "Sponsors", href: "/sponsors", comingSoon: true },
+  { label: "Legacy", href: "/legacy", comingSoon: true },
 ];
 
 const containerVariants = {
@@ -101,20 +100,32 @@ export default function Navbar() {
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="hidden md:flex items-center gap-10" 
+          className="hidden md:flex items-center gap-8" 
           aria-label="Main navigation"
         >
           {NAV_LINKS.map((link) => (
             <motion.div key={link.label} variants={itemVariants}>
-              <Magnetic strength={0.3}>
-                <Link
-                  href={link.href}
-                  className="group relative font-sans text-[11px] uppercase tracking-[0.3em] font-light transition-all duration-500 ease-in-out hover:text-[var(--color-primary)] py-2"
-                  style={{ color: scrolled ? "var(--color-fg-muted)" : "#CBD5E1" }}
-                >
-                  {link.label}
-                  <span className="absolute bottom-0 left-0 w-full h-[1px] bg-primary scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
-                </Link>
+              <Magnetic strength={0.2}>
+                <div className="flex items-center gap-1">
+                  <Link
+                    href={link.href}
+                    className="group relative font-sans text-[11px] uppercase tracking-[0.25em] font-light transition-all duration-500 ease-in-out hover:text-[var(--color-primary)] py-2"
+                    style={{ color: scrolled ? "var(--color-fg-muted)" : "#CBD5E1" }}
+                  >
+                    {link.label}
+                    <span className="absolute bottom-0 left-0 w-full h-[1px] bg-primary scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
+                  </Link>
+                  {link.comingSoon && (
+                    <span
+                      className="font-sans text-[7px] uppercase tracking-[0.1em] font-semibold px-1.5 py-0.5 rounded bg-[var(--color-primary)]/10 border border-[var(--color-primary)]/20 text-[var(--color-primary)] leading-none select-none"
+                      style={{
+                        transform: "translateY(-1px)",
+                      }}
+                    >
+                      Soon
+                    </span>
+                  )}
+                </div>
               </Magnetic>
             </motion.div>
           ))}
@@ -190,10 +201,22 @@ export default function Navbar() {
                   key={link.label}
                   href={link.href}
                   onClick={() => setMenuOpen(false)}
-                  className="font-sans text-[14px] uppercase tracking-[0.3em] font-light"
+                  className="font-sans text-[14px] uppercase tracking-[0.3em] font-light flex items-center gap-3"
                   style={{ color: "var(--color-fg-muted)" }}
                 >
                   {link.label}
+                  {link.comingSoon && (
+                    <span
+                      className="font-sans text-[8px] uppercase tracking-[0.15em] font-semibold px-1.5 py-0.5 rounded-full leading-none"
+                      style={{
+                        backgroundColor: "var(--color-primary)",
+                        color: "#0a0a0a",
+                        opacity: 0.85,
+                      }}
+                    >
+                      Soon
+                    </span>
+                  )}
                 </Link>
               ))}
               <div className="pt-6">

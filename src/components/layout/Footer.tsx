@@ -35,22 +35,21 @@ export default function Footer() {
 
   const footerLinks = {
     platform: [
-      { label: "About SOPHEP", href: "/#about" },
+      { label: "About SOPHEP", href: "/about" },
       { label: "Our Story", href: "/#story" },
-      { label: "Corporate Partners", href: "/sponsors" },
+      { label: "Corporate Partners", href: "/#sponsors" },
       { label: "Executive Team", href: "/#team" },
     ],
     events: [
       { label: "GIMUN 2025", href: "/#pillars" },
       { label: "MOOT Cup 25", href: "/#pillars" },
-      { label: "Event Schedule", href: "/schedule" },
-      { label: "Guest Speakers", href: "/speakers" },
+      { label: "Schedule (Coming Soon)", href: "#" },
     ],
     registration: [
       { label: "Register Now", href: "/register" },
-      { label: "Hall of Fame", href: "/legacy" },
-      { label: "Fees & Timeline", href: "/timeline" },
-      { label: "FAQs", href: "/faqs" },
+      { label: "Hall of Fame", href: "/#legacy" },
+      { label: "Fees & Timeline", href: "/register" },
+      { label: "FAQs", href: "/#faqs" },
     ]
   };
 
@@ -171,6 +170,36 @@ export default function Footer() {
                   </a>
                 </Magnetic>
               ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Newsletter Subscription */}
+        <div className="mb-20 pt-10 border-t border-[var(--color-border)]">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
+            <div className="max-w-md">
+              <h3 className="font-display text-2xl font-bold uppercase mb-2" style={{ color: "var(--color-fg)" }}>
+                Stay Updated
+              </h3>
+              <p className="font-sans text-[13px] text-[var(--color-fg-muted)] leading-relaxed">
+                Subscribe to our newsletter for the latest updates on GIMUN 25, delegate preparation materials, and deadlines.
+              </p>
+            </div>
+            <div className="w-full md:w-auto flex-grow max-w-md">
+              <form className="relative flex items-center" onSubmit={(e) => e.preventDefault()}>
+                <input 
+                  type="email" 
+                  placeholder="Enter your email address" 
+                  className="w-full bg-[var(--color-bg-muted)]/10 border border-[var(--color-border)] rounded-full py-4 pl-6 pr-32 font-sans text-sm text-[var(--color-fg)] placeholder:text-[var(--color-fg-muted)]/50 focus:outline-none focus:border-[var(--color-primary)]/50 transition-colors"
+                  required
+                />
+                <button 
+                  type="submit" 
+                  className="absolute right-2 top-2 bottom-2 bg-[var(--color-primary)] text-[var(--color-bg)] font-sans text-xs uppercase tracking-widest font-bold px-6 rounded-full hover:bg-[var(--color-primary)]/90 transition-colors"
+                >
+                  Subscribe
+                </button>
+              </form>
             </div>
           </div>
         </div>

@@ -108,7 +108,7 @@ export default function AdminLoginPage() {
 
       <style jsx>{`
         .admin-login-root {
-          min-height: 100vh;
+          min-height: 100dvh;
           background: #05010f;
           display: flex;
           align-items: center;

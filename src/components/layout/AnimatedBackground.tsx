@@ -26,10 +26,10 @@ export default function AnimatedBackground() {
     };
     window.addEventListener("resize", onResize);
 
-    const N = 60;
-    const MAX_DIST = 130;
+    const N = 35;
+    const MAX_DIST_SQ = 130 * 130;
     const particles: Particle[] = Array.from({ length: N }, (_, i) => {
-      const isHub = i < 7;
+      const isHub = i < 5;
       return {
         x: Math.random() * w, y: Math.random() * h,
         vx: (Math.random() - 0.5) * (isHub ? 0.12 : 0.22),
@@ -62,19 +62,21 @@ export default function AnimatedBackground() {
         ctx.fill();
       }
 
+      ctx.beginPath();
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
           const a = particles[i], b = particles[j];
           const dx = a.x - b.x, dy = a.y - b.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < MAX_DIST) {
-            ctx.beginPath();
+          const distSq = dx * dx + dy * dy;
+          if (distSq < MAX_DIST_SQ) {
             ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y);
-            ctx.strokeStyle = `rgba(46,117,182,${(1 - dist / MAX_DIST) * 0.14})`;
-            ctx.lineWidth = 0.6; ctx.stroke();
           }
         }
       }
+      ctx.strokeStyle = "rgba(46,117,182,0.08)";
+      ctx.lineWidth = 0.6; 
+      ctx.stroke();
+
       animId = requestAnimationFrame(draw);
     };
 

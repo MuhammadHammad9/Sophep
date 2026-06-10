@@ -10,7 +10,10 @@ import { generateQrCodeBuffer, generateQrCodeDataUri } from '@/lib/generateQrCod
 import { generateConfirmationPdf } from '@/lib/confirmationPdf';
 import { checkRateLimit, getClientIp } from '@/lib/rateLimit';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret-do-not-use';
+if (!process.env.JWT_SECRET) {
+  throw new Error('JWT_SECRET environment variable is required but not set. Please configure it in your environment.');
+}
+const JWT_SECRET = process.env.JWT_SECRET;
 const secret = new TextEncoder().encode(JWT_SECRET);
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -584,12 +587,18 @@ export async function promoteFromWaitlist(waitlistId: string) {
  * Exports all registrations + delegates as an Excel workbook.
  * Returns the file as a base64 string so the client can trigger a download.
  */
-export async function exportRegistrationsToExcel(): Promise<{
+export async function exportRegistrationsToExcel(csrfToken: string): Promise<{
   success: boolean;
   base64?: string;
   filename?: string;
   error?: string;
 }> {
+  // Validate CSRF token
+  const isValidCsrf = await validateAdminCsrf(csrfToken);
+  if (!isValidCsrf) {
+    return { success: false, error: 'Invalid CSRF token. Please refresh and try again.' };
+  }
+
   try {
     const { data, error } = await supabaseAdmin
       .from('registrations')
@@ -774,9 +783,16 @@ export async function getAuditLog(): Promise<AuditEntry[]> {
 // ─── BULK STATUS UPDATE ───────────────────────────────────────────────────────
 
 export async function bulkUpdatePaymentStatus(
+  csrfToken: string,
   ids: string[],
   status: 'verified' | 'rejected'
 ): Promise<{ success: boolean; updated: number; skipped: number; error?: string }> {
+  // Validate CSRF token
+  const isValidCsrf = await validateAdminCsrf(csrfToken);
+  if (!isValidCsrf) {
+    return { success: false, updated: 0, skipped: 0, error: 'Invalid CSRF token. Please refresh and try again.' };
+  }
+  
   if (!ids.length) return { success: false, updated: 0, skipped: 0, error: 'No IDs provided.' };
 
   // Get admin email from session for audit log

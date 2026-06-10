@@ -15,7 +15,7 @@ export default function GlobalError({
 }) {
   return (
     <html lang="en" className={inter.variable}>
-      <body className="bg-[var(--color-bg)] text-[var(--color-fg)] min-h-screen flex items-center justify-center p-4">
+      <body className="bg-[var(--color-bg)] text-[var(--color-fg)] min-h-dvh flex items-center justify-center p-4">
         <div className="max-w-md w-full bg-white dark:bg-[#1a0e2e] border border-red-500/20 rounded-2xl p-8 text-center shadow-2xl relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-1 bg-red-500" />
           

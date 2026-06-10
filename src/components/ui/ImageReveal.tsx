@@ -35,10 +35,10 @@ export default function ImageReveal({
   // ── Reveal overlay (slides away to expose the image) ─────────────────────
   const revealVariants: Variants = {
     hidden: {
-      scaleY: direction === "up" || direction === "down" ? 1 : 0,
-      scaleX: direction === "left" || direction === "right" ? 1 : 0,
-      originY: direction === "up" ? 1 : 0,
-      originX: direction === "left" ? 1 : 0,
+      scaleY: 1,
+      scaleX: 1,
+      originY: direction === "up" ? 0 : direction === "down" ? 1 : 0,
+      originX: direction === "left" ? 0 : direction === "right" ? 1 : 0,
     },
     visible: {
       scaleY: direction === "up" || direction === "down" ? 0 : 1,

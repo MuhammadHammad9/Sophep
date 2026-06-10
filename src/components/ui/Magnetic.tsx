@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useRef, useState, ReactNode } from "react";
-import { motion } from "framer-motion";
+import React, { useRef, useState, useEffect, ReactNode } from "react";
+import { motion, useMotionValue, useSpring } from "framer-motion";
 
 interface MagneticProps {
   children: ReactNode;
@@ -11,23 +11,37 @@ interface MagneticProps {
 
 export default function Magnetic({ children, strength = 0.5, className = "" }: MagneticProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [isMobile, setIsMobile] = useState(false);
+  
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const springX = useSpring(x, { stiffness: 150, damping: 15, mass: 0.1 });
+  const springY = useSpring(y, { stiffness: 150, damping: 15, mass: 0.1 });
+
+  useEffect(() => {
+    if (window.matchMedia("(pointer: coarse)").matches || window.innerWidth < 768) {
+      setIsMobile(true);
+    }
+  }, []);
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (!ref.current) return;
+    if (!ref.current || isMobile) return;
     
     const { clientX, clientY } = e;
     const { width, height, left, top } = ref.current.getBoundingClientRect();
     
-    const x = (clientX - (left + width / 2)) * strength;
-    const y = (clientY - (top + height / 2)) * strength;
-    
-    setPosition({ x, y });
+    x.set((clientX - (left + width / 2)) * strength);
+    y.set((clientY - (top + height / 2)) * strength);
   };
 
   const handleMouseLeave = () => {
-    setPosition({ x: 0, y: 0 });
+    x.set(0);
+    y.set(0);
   };
+
+  if (isMobile) {
+    return <div className={className}>{children}</div>;
+  }
 
   return (
     <motion.div
@@ -35,8 +49,7 @@ export default function Magnetic({ children, strength = 0.5, className = "" }: M
       className={className}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      animate={{ x: position.x, y: position.y }}
-      transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.1 }}
+      style={{ x: springX, y: springY }}
     >
       {children}
     </motion.div>
