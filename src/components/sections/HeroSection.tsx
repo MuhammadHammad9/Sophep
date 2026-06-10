@@ -201,7 +201,7 @@ export default function HeroSection() {
                 <div>
                   <div className="mb-4">
                     <div className="font-sans text-[10px] uppercase tracking-[0.35em] font-medium text-[var(--color-fg-subtle)] mb-2">Countdown</div>
-                    <CountdownTimer targetDate={new Date("2025-12-05T09:00:00+05:00")} />
+                    <CountdownTimer targetDate={new Date("2026-12-05T09:00:00+05:00")} />
                   </div>
                 </div>
 
@@ -250,7 +250,7 @@ export default function HeroSection() {
               December 5-7
             </span>
           </div>
-          <CountdownTimer targetDate={new Date("2025-12-05T09:00:00+05:00")} />
+          <CountdownTimer targetDate={new Date("2026-12-05T09:00:00+05:00")} />
         </motion.div>
       </div>
 
