@@ -1,43 +1,66 @@
 "use client";
 
-import React from "react";
+import { useReducedMotion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 interface InfiniteMarqueeProps {
-  items: string[];
+  items: readonly string[] | string[];
   speed?: "slow" | "base" | "fast";
   direction?: "left" | "right";
+  variant?: "default" | "accent" | "primary";
   className?: string;
 }
+
+const SPEED_MAP = {
+  slow: "60s",
+  base: "40s",
+  fast: "20s",
+} as const;
+
+const VARIANT_STYLES = {
+  default: "border-[var(--color-fg)] bg-[var(--color-bg-raised)] text-[var(--color-fg)]",
+  accent: "border-[var(--color-fg)] bg-[var(--color-neo-pink)] text-[var(--color-bg)]",
+  primary: "border-[var(--color-fg)] bg-[var(--color-primary)] text-[var(--color-fg)]",
+} as const;
 
 export default function InfiniteMarquee({
   items,
   speed = "base",
   direction = "left",
+  variant = "default",
   className = "",
 }: InfiniteMarqueeProps) {
-  const speedMap = {
-    slow: "60s",
-    base: "40s",
-    fast: "20s",
-  };
+  const prefersReducedMotion = useReducedMotion();
+  const loopItems = [...items, ...items];
 
   return (
-    <div className={`overflow-hidden py-4 border-y-2 border-[var(--color-fg)] bg-[var(--color-bg-raised)] ${className}`}>
-      <div 
-        className="flex whitespace-nowrap marquee-track"
-        style={{ 
-          animationDuration: speedMap[speed],
-          animationDirection: direction === "right" ? "reverse" : "normal"
+    <div
+      className={cn(
+        "overflow-hidden py-4 border-y-2",
+        VARIANT_STYLES[variant],
+        className
+      )}
+      aria-hidden
+    >
+      <div
+        className={cn(
+          "flex whitespace-nowrap",
+          prefersReducedMotion ? "" : "marquee-track"
+        )}
+        style={{
+          animationDuration: prefersReducedMotion ? undefined : SPEED_MAP[speed],
+          animationDirection: prefersReducedMotion ? undefined : direction === "right" ? "reverse" : "normal",
         }}
       >
-        {/* Duplicate items for seamless loop */}
-        {[...items, ...items, ...items, ...items].map((item, idx) => (
+        {loopItems.map((item, idx) => (
           <div
-            key={idx}
-            className="flex items-center px-8 text-6xl md:text-8xl font-display font-extrabold uppercase tracking-tighter"
+            key={`${item}-${idx}`}
+            className="flex items-center px-8 text-4xl sm:text-6xl md:text-8xl font-display font-extrabold uppercase tracking-tighter shrink-0"
           >
             {item}
-            <span className="ml-16 text-[var(--color-primary)]">★</span>
+            <span className="ml-16 opacity-80" aria-hidden>
+              ★
+            </span>
           </div>
         ))}
       </div>

@@ -3,29 +3,35 @@
 import Link from "next/link";
 import { ChevronRight, Download } from "lucide-react";
 import GlitchHeading from "@/components/ui/GlitchHeading";
-import AnimatedBackground from "@/components/layout/AnimatedBackground";
 import { motion } from "framer-motion";
 
 export default function SuccessPage() {
   return (
-    <div className="relative min-h-screen flex items-center justify-center pt-24 pb-12 px-4 overflow-hidden">
-      <AnimatedBackground />
+    <div className="relative min-h-dvh flex items-center justify-center pt-24 pb-12 px-4 overflow-hidden">
+      <div
+        className="absolute inset-0 pointer-events-none"
+        aria-hidden="true"
+        style={{
+          background:
+            "radial-gradient(circle at 20% 20%, rgba(139,92,246,0.16), transparent 35%), radial-gradient(circle at 80% 0%, rgba(0,240,255,0.08), transparent 28%), linear-gradient(180deg, rgba(6,1,15,0.92), rgba(6,1,15,0.98))",
+        }}
+      />
       
       <motion.div 
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
         className="relative z-10 max-w-2xl w-full"
       >
         <div className="absolute inset-0 bg-gradient-to-b from-[var(--color-primary)]/10 to-transparent blur-3xl -z-10 rounded-full opacity-50" />
         
-        <div className="bg-[var(--color-bg)]/80 border border-[var(--color-border-hover)] rounded-xl p-10 md:p-16 text-center shadow-2xl backdrop-blur-xl relative overflow-hidden">
+        <div className="bg-[var(--color-bg)]/82 border border-[var(--color-border-hover)] rounded-xl p-8 md:p-16 text-center shadow-2xl backdrop-blur-xl relative overflow-hidden">
           
           <div className="mx-auto w-28 h-28 flex items-center justify-center mb-8 relative">
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 0.1, type: "spring", stiffness: 200, damping: 20 }}
+              transition={{ delay: 0.05, type: "spring", stiffness: 170, damping: 22 }}
               className="relative flex items-center justify-center w-full h-full"
             >
               <motion.svg
@@ -82,27 +88,27 @@ export default function SuccessPage() {
               </motion.svg>
             </motion.div>
 
-            {/* Ripple Pop Effect */}
-            <motion.div
-              className="absolute rounded-full border border-[var(--color-primary)] pointer-events-none"
-              style={{ width: "90px", height: "90px" }}
-              initial={{ scale: 1, opacity: 0 }}
-              animate={{ scale: 1.6, opacity: 0 }}
-              transition={{ duration: 0.8, ease: "easeOut", delay: 0.6 }}
-            />
-          </div>
+              {/* Ripple Pop Effect */}
+              <motion.div
+                className="absolute rounded-full border border-[var(--color-primary)] pointer-events-none"
+                style={{ width: "90px", height: "90px" }}
+                initial={{ scale: 1, opacity: 0 }}
+                animate={{ scale: 1.6, opacity: 0 }}
+                transition={{ duration: 0.7, ease: "easeOut", delay: 0.45 }}
+              />
+            </div>
           
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.6 }}
+            transition={{ delay: 0.35, duration: 0.45 }}
           >
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[var(--color-primary)]/20 bg-[var(--color-primary)]/5 mb-6">
-              <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-green-500" />
               <span className="font-sans text-[10px] uppercase tracking-[0.2em] text-[var(--color-primary)]">Secured & Verified</span>
             </div>
 
-            <h1 className="font-heading text-3xl md:text-5xl uppercase tracking-wider mb-6 leading-tight">
+            <h1 className="font-display text-3xl md:text-5xl uppercase tracking-wider mb-6 leading-tight">
               Application <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)]"><GlitchHeading text="Received" /></span>
             </h1>
             
@@ -116,7 +122,7 @@ export default function SuccessPage() {
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.8, duration: 0.6 }}
+            transition={{ delay: 0.55, duration: 0.45 }}
             className="flex flex-col sm:flex-row items-center justify-center gap-4"
           >
             <Link 

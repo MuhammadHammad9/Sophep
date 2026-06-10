@@ -44,8 +44,6 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { Toaster } from "sonner";
 
-import CustomCursor from "@/components/ui/CustomCursor";
-import PageProgress from "@/components/ui/PageProgress";
 import NoiseGrain from "@/components/ui/NoiseGrain";
 
 export default function RootLayout({
@@ -57,8 +55,6 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning className={`${epilogue.variable} ${syne.variable} ${pinyonScript.variable} scroll-smooth relative`}>
       <body suppressHydrationWarning={true} className="relative min-h-full antialiased bg-[var(--color-bg)] text-[var(--color-fg)] flex flex-col selection:bg-primary selection:text-white">
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
-          <CustomCursor />
-          <PageProgress />
           <NoiseGrain />
 
           <SmoothScroll>

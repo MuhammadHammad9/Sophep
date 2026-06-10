@@ -12,10 +12,7 @@ desktop.ini
 # Node / package manager artefacts
 node_modules/
 npm-debug.log*
-yarn.lock
-pnpm-lock.yaml
 .pnpm-store/
-package-lock.json
 
 # Build output
 /.next/
@@ -42,3 +39,5 @@ out/
 *.tmp
 *.bak
 *.orig
+
+.vercel
